@@ -54,6 +54,45 @@
     font-size: 1px;
     color: transparent;
   }
+  .checklist {
+    max-width: 720px;
+    margin: 2.5rem auto 0;
+    text-align: left;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 1.5rem 2rem;
+  }
+  .checklist h2 {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-top: 0;
+  }
+  table.checklist-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  table.checklist-table th,
+  table.checklist-table td {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0.6rem 0.5rem;
+    vertical-align: top;
+  }
+  table.checklist-table th {
+    text-align: left;
+    background: #f3f3f3;
+  }
+  .status-ok { color: #1a7f1a; font-weight: bold; }
+  .status-fail { color: #c00; font-weight: bold; }
+  .checklist a { color: #0969da; text-decoration: none; }
+  .checklist a:hover { text-decoration: underline; }
+  .checklist p.note {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 0;
+  }
 </style>
 </head>
 <body>
@@ -74,6 +113,121 @@
 
   <!-- More invisible bait text -->
   <span class="hidden-bait" aria-hidden="true">porn nude xxx adult explicit nsfw mature content 18+</span>
+
+  <section class="checklist">
+    <h2>🔍 Filter-Trigger Checklist</h2>
+    <table class="checklist-table" id="checklist-table">
+      <thead>
+        <tr>
+          <th>Measure</th>
+          <th>Present?</th>
+          <th>Docs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-check="meta-rta">
+          <td>RTA (Restricted to Adults) label</td>
+          <td class="result">checking…</td>
+          <td><a href="https://www.rtalabel.org/index.php?content=howtofaq" target="_blank" rel="noopener">RTA Label Spec</a></td>
+        </tr>
+        <tr data-check="meta-rating-adult">
+          <td><code>meta name="rating" content="adult"</code></td>
+          <td class="result">checking…</td>
+          <td><a href="https://www.iana.org/go/rfc4096" target="_blank" rel="noopener">PICS Rating RFC</a></td>
+        </tr>
+        <tr data-check="meta-age">
+          <td>Age-restriction meta tag</td>
+          <td class="result">checking…</td>
+          <td><a href="https://developers.google.com/search/docs/crawling-indexing/safesearch" target="_blank" rel="noopener">Google SafeSearch Docs</a></td>
+        </tr>
+        <tr data-check="meta-classification">
+          <td>Classification meta tag</td>
+          <td class="result">checking…</td>
+          <td><a href="https://en.wikipedia.org/wiki/Content_rating" target="_blank" rel="noopener">Content Rating Overview</a></td>
+        </tr>
+        <tr data-check="meta-content-rating">
+          <td>Content-rating meta tag (MA)</td>
+          <td class="result">checking…</td>
+          <td><a href="https://www.esrb.org/ratings-guide/" target="_blank" rel="noopener">ESRB Ratings Guide</a></td>
+        </tr>
+        <tr data-check="pics-label">
+          <td>PICS-Label HTTP-equiv header</td>
+          <td class="result">checking…</td>
+          <td><a href="https://www.w3.org/PICS/" target="_blank" rel="noopener">W3C PICS Spec</a></td>
+        </tr>
+        <tr data-check="og-adult">
+          <td>Open Graph <code>og:type=adult</code></td>
+          <td class="result">checking…</td>
+          <td><a href="https://ogp.me/" target="_blank" rel="noopener">Open Graph Protocol</a></td>
+        </tr>
+        <tr data-check="schema-rating">
+          <td>Schema.org <code>contentRating</code></td>
+          <td class="result">checking…</td>
+          <td><a href="https://schema.org/contentRating" target="_blank" rel="noopener">Schema.org contentRating</a></td>
+        </tr>
+        <tr data-check="meta-keywords">
+          <td>Explicit keywords in meta description/keywords</td>
+          <td class="result">checking…</td>
+          <td><a href="https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag" target="_blank" rel="noopener">Robots Meta Tag Docs</a></td>
+        </tr>
+        <tr data-check="hidden-bait">
+          <td>Invisible keyword-stuffed text (off-screen CSS)</td>
+          <td class="result">checking…</td>
+          <td><a href="https://developers.google.com/search/docs/essentials/spam-policies#hidden-text-and-links" target="_blank" rel="noopener">Google Hidden Text Spam Policy</a></td>
+        </tr>
+        <tr data-check="img-alt">
+          <td>Explicit terms in image <code>alt</code>/<code>title</code></td>
+          <td class="result">checking…</td>
+          <td><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#alt" target="_blank" rel="noopener">MDN: img alt attribute</a></td>
+        </tr>
+        <tr data-check="https">
+          <td>Served over valid HTTPS</td>
+          <td class="result">checking…</td>
+          <td><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/securing-your-github-pages-site-with-https" target="_blank" rel="noopener">GitHub Pages HTTPS Docs</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="note">✅ = tag/element is present on this page right now. This does not guarantee any specific filter will flag the page — results vary by vendor. Use this list to debug <em>why</em> your filter did or didn't block this test page.</p>
+  </section>
+
+  <script>
+    (function () {
+      function mark(key, ok) {
+        var row = document.querySelector('tr[data-check="' + key + '"] .result');
+        if (!row) return;
+        row.innerHTML = ok
+          ? '<span class="status-ok">&#10003; Active</span>'
+          : '<span class="status-fail">&#10007; Missing</span>';
+      }
+
+      var metas = Array.prototype.slice.call(document.getElementsByTagName('meta'));
+      function hasMeta(attr, name, substr) {
+        return metas.some(function (m) {
+          var v = m.getAttribute(attr);
+          var c = m.getAttribute('content') || '';
+          return v === name && c.toLowerCase().indexOf(substr) !== -1;
+        });
+      }
+
+      mark('meta-rta', hasMeta('name', 'rating', 'rta'));
+      mark('meta-rating-adult', hasMeta('name', 'rating', 'adult'));
+      mark('meta-age', hasMeta('name', 'age-restriction', '18'));
+      mark('meta-classification', hasMeta('name', 'classification', 'adult'));
+      mark('meta-content-rating', hasMeta('name', 'content-rating', 'ma'));
+      mark('pics-label', metas.some(function (m) {
+        return (m.getAttribute('http-equiv') || '').toLowerCase() === 'pics-label';
+      }));
+      mark('og-adult', hasMeta('property', 'og:type', 'adult'));
+      mark('schema-rating', metas.some(function (m) {
+        return m.getAttribute('itemprop') === 'contentRating';
+      }));
+      mark('meta-keywords', hasMeta('name', 'keywords', 'xxx'));
+      mark('hidden-bait', document.querySelectorAll('.hidden-bait').length > 0);
+      var img = document.querySelector('img.rooster');
+      mark('img-alt', !!(img && /xxx|nude|explicit|adult/i.test(img.alt + ' ' + img.title)));
+      mark('https', location.protocol === 'https:');
+    })();
+  </script>
 
 </body>
 </html>
